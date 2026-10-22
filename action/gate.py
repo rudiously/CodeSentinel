@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import sys
 from typing import Any
 
 import httpx
@@ -119,7 +120,10 @@ def workload_token(client: httpx.Client) -> str:
         },
     )
     response.raise_for_status()
-    return str(response.json()["value"])
+    token = response.json()["value"]
+    if not isinstance(token, str) or not token.strip():
+        raise ValueError("Invalid Actions identity response")
+    return token
 
 
 def main() -> int:
@@ -154,9 +158,32 @@ def main() -> int:
     return exit_code(report)
 
 
-if __name__ == "__main__":
+def cli() -> int:
+    """Report safe failure categories without exception bodies, tokens or source."""
     try:
-        raise SystemExit(main())
-    except (ValueError, KeyError, OSError, subprocess.SubprocessError, httpx.HTTPError):
-        print("CodeSentinel ERROR: request or gate failed; source and tokens omitted.")
-        raise SystemExit(2)
+        return main()
+    except httpx.HTTPStatusError as exc:
+        print(
+            "CodeSentinel ERROR: HTTP request failed "
+            f"(status={exc.response.status_code}, "
+            f"host={exc.request.url.host}, path={exc.request.url.path}).",
+            file=sys.stderr,
+        )
+    except httpx.TimeoutException:
+        print("CodeSentinel ERROR: API request timed out.", file=sys.stderr)
+    except httpx.RequestError as exc:
+        print(
+            "CodeSentinel ERROR: API request failed " f"(type={type(exc).__name__}).",
+            file=sys.stderr,
+        )
+    except (ValueError, KeyError, OSError, subprocess.SubprocessError) as exc:
+        print(
+            "CodeSentinel ERROR: input, configuration, or local operation failed "
+            f"(type={type(exc).__name__}).",
+            file=sys.stderr,
+        )
+    return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(cli())
