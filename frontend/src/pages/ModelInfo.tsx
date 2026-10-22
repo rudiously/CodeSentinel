@@ -26,7 +26,8 @@ export function ModelInfo() {
                                 <a
                                     href={
                                         (import.meta.env.VITE_MLFLOW_URL as
-                                            string | undefined) ||
+                                            | string
+                                            | undefined) ||
                                         "http://localhost:5001"
                                     }
                                 >

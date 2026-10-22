@@ -36,12 +36,10 @@ export function Analytics() {
         name,
         value: scans.filter((s) => s.decision === name).length,
     }));
-    const trends = [...scans]
-        .reverse()
-        .map((s) => ({
-            name: new Date(s.timestamp).toLocaleDateString(),
-            risk: s.risk_score === null ? null : Math.round(s.risk_score * 100),
-        }));
+    const trends = [...scans].reverse().map((s) => ({
+        name: new Date(s.timestamp).toLocaleDateString(),
+        risk: s.risk_score === null ? null : Math.round(s.risk_score * 100),
+    }));
     return (
         <>
             <Header
