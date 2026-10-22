@@ -1,2 +1,149 @@
-import {useState} from 'react';import {api,useMocks} from '../api/client';import type {Decision,ScanReport} from '../api/types';import {useResource} from '../hooks/useResource';import {Badge,Header,percent,Provenance,State} from '../components/common';import {ReportView} from './ScanDetail';
-export function ScanHistory(){const [revision,setRevision]=useState(0);const history=useResource(api.history,`history-${revision}`);const [filter,setFilter]=useState<Decision|'ALL'>('ALL');const [code,setCode]=useState('def add(a, b):\n    return a + b\n');const [busy,setBusy]=useState(false);const [error,setError]=useState('');const [report,setReport]=useState<ScanReport>();const repository=new URLSearchParams(window.location.search).get('repo');const scans=history.data?.filter(s=>(filter==='ALL'||s.decision===filter)&&(!repository||s.repository===repository));async function scan(){setBusy(true);setError('');try{setReport(await api.scan(code));setRevision(x=>x+1)}catch(e){setError(e instanceof Error?e.message:'Scan failed')}finally{setBusy(false)}}return <><Header eyebrow="SECURITY OPERATIONS" title="Scan history" description="Every decision keeps its model provenance, risk score, and explanation."/>{history.data?.[0]&&<Provenance scan={history.data[0]}/>}<div className="toolbar"><label>Decision <select value={filter} onChange={e=>setFilter(e.target.value as Decision|'ALL')}>{['ALL','PASS','WARN','BLOCK','ERROR'].map(value=><option key={value}>{value}</option>)}</select></label><button onClick={()=>setRevision(x=>x+1)}>Refresh ↻</button></div><State loading={history.loading} error={history.error} empty={scans?.length===0}><div className="panel table-wrap"><table><thead><tr><th>Repository / scan</th><th>Decision</th><th>Risk</th><th>Model</th><th>Time</th></tr></thead><tbody>{scans?.map(scan=><tr key={scan.scan_id}><td><a href={`/scans/${scan.scan_id}`}>{scan.repository}</a><small>{scan.scan_id.slice(0,8)} {scan.synthetic?'· SYNTHETIC':''}</small></td><td><Badge decision={scan.decision}/></td><td>{percent(scan.risk_score)}</td><td>{scan.artifact_kind}<small>{scan.model_version}</small></td><td>{new Date(scan.timestamp).toLocaleString()}</td></tr>)}</tbody></table></div></State><section className="panel"><h2>Scan a Python file</h2><p className="muted">Code is parsed and analyzed; it is never executed. Source is not saved in history.</p><label className="sr-only" htmlFor="code">Python source</label><textarea id="code" spellCheck={false} value={code} onChange={e=>setCode(e.target.value)} maxLength={100000}/><button disabled={busy||!code.trim()||useMocks} onClick={()=>void scan()}>{busy?'Analyzing…':'Run scan →'}</button>{useMocks&&<p>SYNTHETIC mock mode: scanning disabled. Connect the API to scan code.</p>}{error&&<p role="alert">{error}</p>}</section>{report&&<ReportView scan={report}/>}</>}
+import { useState } from "react";
+import { api, useMocks } from "../api/client";
+import type { Decision, ScanReport } from "../api/types";
+import { useResource } from "../hooks/useResource";
+import {
+    Badge,
+    Header,
+    percent,
+    Provenance,
+    State,
+} from "../components/common";
+import { ReportView } from "./ScanDetail";
+export function ScanHistory() {
+    const [revision, setRevision] = useState(0);
+    const history = useResource(api.history, `history-${revision}`);
+    const [filter, setFilter] = useState<Decision | "ALL">("ALL");
+    const [code, setCode] = useState("def add(a, b):\n    return a + b\n");
+    const [busy, setBusy] = useState(false);
+    const [error, setError] = useState("");
+    const [report, setReport] = useState<ScanReport>();
+    const repository = new URLSearchParams(window.location.search).get("repo");
+    const scans = history.data?.filter(
+        (s) =>
+            (filter === "ALL" || s.decision === filter) &&
+            (!repository || s.repository === repository),
+    );
+    async function scan() {
+        setBusy(true);
+        setError("");
+        try {
+            setReport(await api.scan(code));
+            setRevision((x) => x + 1);
+        } catch (e) {
+            setError(e instanceof Error ? e.message : "Scan failed");
+        } finally {
+            setBusy(false);
+        }
+    }
+    return (
+        <>
+            <Header
+                eyebrow="SECURITY OPERATIONS"
+                title="Scan history"
+                description="Every decision keeps its model provenance, risk score, and explanation."
+            />
+            {history.data?.[0] && <Provenance scan={history.data[0]} />}
+            <div className="toolbar">
+                <label>
+                    Decision{" "}
+                    <select
+                        value={filter}
+                        onChange={(e) =>
+                            setFilter(e.target.value as Decision | "ALL")
+                        }
+                    >
+                        {["ALL", "PASS", "WARN", "BLOCK", "ERROR"].map(
+                            (value) => (
+                                <option key={value}>{value}</option>
+                            ),
+                        )}
+                    </select>
+                </label>
+                <button onClick={() => setRevision((x) => x + 1)}>
+                    Refresh ↻
+                </button>
+            </div>
+            <State
+                loading={history.loading}
+                error={history.error}
+                empty={scans?.length === 0}
+            >
+                <div className="panel table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Repository / scan</th>
+                                <th>Decision</th>
+                                <th>Risk</th>
+                                <th>Model</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {scans?.map((scan) => (
+                                <tr key={scan.scan_id}>
+                                    <td>
+                                        <a href={`/scans/${scan.scan_id}`}>
+                                            {scan.repository}
+                                        </a>
+                                        <small>
+                                            {scan.scan_id.slice(0, 8)}{" "}
+                                            {scan.synthetic
+                                                ? "· SYNTHETIC"
+                                                : ""}
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <Badge decision={scan.decision} />
+                                    </td>
+                                    <td>{percent(scan.risk_score)}</td>
+                                    <td>
+                                        {scan.artifact_kind}
+                                        <small>{scan.model_version}</small>
+                                    </td>
+                                    <td>
+                                        {new Date(
+                                            scan.timestamp,
+                                        ).toLocaleString()}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </State>
+            <section className="panel">
+                <h2>Scan a Python file</h2>
+                <p className="muted">
+                    Code is parsed and analyzed; it is never executed. Source is
+                    not saved in history.
+                </p>
+                <label className="sr-only" htmlFor="code">
+                    Python source
+                </label>
+                <textarea
+                    id="code"
+                    spellCheck={false}
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    maxLength={100000}
+                />
+                <button
+                    disabled={busy || !code.trim() || useMocks}
+                    onClick={() => void scan()}
+                >
+                    {busy ? "Analyzing…" : "Run scan →"}
+                </button>
+                {useMocks && (
+                    <p>
+                        SYNTHETIC mock mode: scanning disabled. Connect the API
+                        to scan code.
+                    </p>
+                )}
+                {error && <p role="alert">{error}</p>}
+            </section>
+            {report && <ReportView scan={report} />}
+        </>
+    );
+}
