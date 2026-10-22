@@ -1,10 +1,10 @@
 # Human Actions
-## H1 — Allow repository initialization
-Observed `git init -b main` fails: `.git: Operation not permitted`.
-1. In your local terminal: `cd /Users/rudra/TY/MLOP/CP/CodeSentinel`.
-2. Run `git init -b main` and configure user.name/user.email if needed.
-3. Enable repository git writes for the agent if available, or commit verified increments manually.
-Unblocks: per-task commits and feature branches. Implementation continues without claiming commits.
+## H1 — Publish follow-up commits
+PM completed initialization and initial push: feat/p0-01-foundations at aea8746, correct origin. Agent `git add` still fails creating .git/index.lock (Operation not permitted).
+1. From a normal terminal, review git diff and stage only reviewed source/docs, including models/README.md; never weights, .env or databases.
+2. Commit the verified Python typing fix and memory changes with a conventional message, then push the existing feature branch.
+3. Current commit uses placeholder identity Your Name <your.email@example.com>; configure your preferred Git identity for future commits if desired. Do not rewrite published history automatically.
+Unblocks: follow-up CI verification and per-task commits.
 ## H2 — Full training
 Colab pipeline is now implemented; follow H8 for exact steps. Do not report earlier metrics as reproduced.
 Unblocks: trained-model evaluation, O1/O7 evidence.
@@ -38,7 +38,7 @@ Unblocks: image builds and live full-stack M4 gate. No live Docker results claim
 Unblocks: live OAuth/App/PR demonstration; P2-03/P2-04 real-service verification. Local fake GitHub tests passed; no live remote write performed.
 
 ## H7 — Install and verify the dashboard
-Observed offline npm ENOTCACHED and online npm ENOTFOUND registry.npmjs.org. No frontend dependency installation, build, lint, tests or browser check has passed.
+Observed offline npm ENOTCACHED and online npm ENOTFOUND registry.npmjs.org. Local installation remains blocked. Remote installation and frontend Docker production build passed; ESLint passed but Prettier failed 17 files; tests/browser remain unverified. npm reported 18 vulnerabilities (3 moderate, 13 high, 2 critical).
 1. Restore npm registry/DNS access. From frontend/: `npm install --ignore-scripts`.
 2. Run `npm run format` to format the authored source, then `npm run lint && npm test && npm run build`. Fix any newly revealed TypeScript/ESLint issues. No clean frontend claim is made until this succeeds.
 3. Commit the generated package-lock.json after review. Replace npm install with npm ci in frontend/Dockerfile and CI to lock transitive dependencies.
@@ -69,12 +69,8 @@ A direct loopback bind to 127.0.0.1 with an ephemeral port failed: PermissionErr
 3. Run the LIVE e2e script after the full stack starts. In-process ASGI checks are not TCP or browser evidence.
 Unblocks: direct local service/browser verification in addition to Docker access.
 
-## H11 — Enable source publication to the selected GitHub repository
-Canonical repository: https://github.com/rudiously/CodeSentinel (default branch main). The GitHub connector verified the repository exists and is empty. Although account-level metadata reports push/admin permission, creating the initial README commit failed with HTTP 403, `Resource not accessible by integration`. No remote file, commit or branch was created. This is a GitHub integration authorization error, not an approval question or a test failure.
+## H11 — GitHub source publication status
+The PM initialized and pushed `feat/p0-01-foundations` at `aea8746dfad4593f9f34b809b413fdc464cfa511`. GitHub CI run 39824257480 completed: all four Docker image builds passed; Python failed on two third-party untyped calls, frontend failed Prettier checks in 17 files. Local fixes for both Python calls pass 86 tests, Ruff, Black and strict mypy (82 files). These fixes have not been pushed. Git staging still fails creating .git/index.lock; connector writes remain HTTP 403. Local npm/PyPI and Docker access remain blocked.
 
-1. In GitHub, open Settings → Applications → Installed GitHub Apps and inspect the ChatGPT/Codex GitHub connection that accesses rudiously/CodeSentinel. Ensure the repository is selected. If the app supports writes, grant/approve Contents read/write; importing .github/workflows also requires workflow-write support. Account-level push permission alone is insufficient.
-2. If the managed connector remains read-only, use authenticated Git from your normal terminal. Configure your Git identity, then `cd /Users/rudra/TY/MLOP/CP/CodeSentinel` and run `git init -b main`. Do not stage the inherited /Users/rudra/TY/MLOP repository. Use the exact target `git remote add origin https://github.com/rudiously/CodeSentinel.git` (or verify/set origin if it already exists).
-3. Verify the remote still has no commits with `git ls-remote origin`. If it is now populated, fetch and compare before importing; never force-push over existing work. Create a feature branch such as `feat/p0-01-foundations` for the application import and keep main changes limited to a verified bootstrap. Review file selection before staging; exclude .env variants, models/checkpoints, datasets, databases, caches, mlruns/mlartifacts and dependencies. Do not publish generated private files.
-4. Push the reviewed feature branch and open a draft PR. Include observed Python-only checks and outstanding frontend/native/runtime blockers; do not claim passing CI or merge to main before the applicable checks pass. The current workspace has no project-local .git or commits; the initial connector write did not succeed.
-5. Once code exists remotely, the Colab notebook already uses REPO_URL=https://github.com/rudiously/CodeSentinel.git. Select the actual reviewed branch/commit as REPO_REF; do not try cloning the currently empty remote for training.
-Unblocks: per-task GitHub commits/feature branches and remote CI/Colab imports. Does not unblock local npm/PyPI/Docker/loopback restrictions by itself.
+Initial publication is complete. For further agent publication, enable project Git writes if supported, or commit/push from a normal terminal (H1). Do not recreate the repository or force-push. Keep the feature branch until CI and required gates pass; main does not exist yet. Colab must select the actual reviewed branch/immutable commit instead of assuming main.
+Unblocks: publishing current corrections and remote verification.

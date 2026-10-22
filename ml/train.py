@@ -91,9 +91,9 @@ def train(config_path: Path) -> dict[str, Any]:
             "dataset_hash"
         ]
         tokenizer = AutoTokenizer.from_pretrained(config["model_id"], use_fast=True)
-        model = AutoModelForSequenceClassification.from_pretrained(
-            config["model_id"], num_labels=2, attn_implementation="eager"
-        )
+        model = cast(
+            Callable[..., Any], AutoModelForSequenceClassification.from_pretrained
+        )(config["model_id"], num_labels=2, attn_implementation="eager")
     device = torch.device(
         "cpu" if smoke else "cuda" if torch.cuda.is_available() else "cpu"
     )

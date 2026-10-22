@@ -10,8 +10,8 @@ Application configuration uses pydantic-settings/environment variables with .env
 
 Pin direct Python requirements per service and ML; pin frontend package versions and base-image tags. The npm transitive lockfile and vulnerability remediation are pending network access; do not fabricate a lockfile or clean audit. CI runs pip-audit/npm audit and fails on audit errors. Prefer CPU Torch wheels on Linux for serving. Weights, datasets, mlruns/, databases, .env, virtualenvs and node_modules remain ignored.
 
-Git policy: main must run; use feat/<task-id> feature branches and small conventional commits after each verified task. Current git init is denied by host policy; the directory inherits an ancestor repo which must NOT be treated as this project or modified. No local project .git, branches or commits are claimed. Record per-task evidence and blockers until a human enables repository git writes. Never stage secrets, generated weights or unrelated ancestor-repository files.
+Git policy: main must run; use feat/<task-id> and small conventional commits after verified tasks. PM bootstrapped the project-local repository on feat/p0-01-foundations at aea8746. Agent staging remains denied (.git/index.lock); never stage secrets, weights or unrelated files. No agent commit is claimed.
 
 Any contract change updates Contracts.md, Architecture.md Decision Log, schemas, consumers, mocks and tests together. Every completed task needs observed verification recorded in Tasks.md/Progress.md. Keep unfinished or externally unverified gates BLOCKED; STUB, SMOKE and SYNTHETIC labels are mandatory wherever applicable.
 
-Canonical remote: https://github.com/rudiously/CodeSentinel. Connector reads are verified but initial contents write returned 403; no source was pushed. H11 is the upload unblock. Do not treat account push metadata as proof of integration write scope or modify permission settings without the requested authorization.
+Canonical remote: https://github.com/rudiously/CodeSentinel. Source push by PM is verified; GitHub connector reads work but writes still return 403. Normal-terminal Git is required until agent write access is available.

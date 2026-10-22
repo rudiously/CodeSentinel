@@ -31,3 +31,6 @@ Ethics and limitations (Project.md Document 17): no safety guarantee; false posi
 
 ## Selected repository write blocker (2026-10-22)
 The user explicitly selected rudiously/CodeSentinel. Repository/account read metadata succeeds but the connected integration's initial contents write returns HTTP 403. No remote mutation or permission expansion occurred; local .git protections were not bypassed. See H11. Evaluation now rejects non-finite scores and ERROR decisions and counts actual safety-floor decisions, avoiding misleading PASS/metric claims.
+
+## CI dependency evidence (2026-10-22)
+Frontend installation in run 39824257480 reported 18 vulnerabilities: 3 moderate, 13 high, 2 critical. Dedicated npm audit was skipped after lint failed; exact advisories and fixed-version review remain required. Python audit was skipped after mypy failed. Four image builds passed; startup/non-root runtime and full-stack network controls remain unverified.

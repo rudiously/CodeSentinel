@@ -4,7 +4,7 @@ import json
 import math
 from pathlib import Path
 from threading import Lock
-from typing import Any, Callable, cast
+from typing import Any, Callable, ContextManager, cast
 
 import torch
 
@@ -74,7 +74,7 @@ class Predictor:
             return_tensors="pt",
             return_offsets_mapping=True,
         )
-        with self.lock, torch.enable_grad():
+        with self.lock, cast(Callable[[], ContextManager[Any]], torch.enable_grad)():
             inputs = self.model.embed(encoded["input_ids"]).detach()
 
             def forward(value: torch.Tensor) -> torch.Tensor:

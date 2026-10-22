@@ -1,7 +1,7 @@
 # Architecture
 
 ## Canonical repository
-https://github.com/rudiously/CodeSentinel — default main; verified empty through the GitHub connector. Initial contents write rejected with HTTP 403 Resource not accessible by integration; no source uploaded, no remote branch/commit exists. Account metadata push permission does not establish connector write scope. H11 records exact remediation.
+https://github.com/rudiously/CodeSentinel — source published by PM on feat/p0-01-foundations at aea8746. Main is not yet present. Four CI image builds passed; runtime deployment is unverified. Agent Git staging denied and connector writes HTTP 403.
 
 ## System and PR data flow
 ```mermaid
@@ -124,3 +124,5 @@ Generated from disk; runtime .venv/cache/MLflow/database/weight contents are exc
 | `models` | `README.md` |
 | `scripts` | `__init__.py`, `e2e_demo.py`, `e2e_demo.sh`, `smoke_test.py`, `smoke_test.sh`, `verify_smoke_artifact.py`, `wait_for_services.sh` |
 | `shared` | `__init__.py`, `http.py`, `schemas.py` |
+
+- 2026-10-22: CI exposed pinned-library typing differences; use narrow Callable casts at Transformers factory and Torch gradient context boundaries, preserving strict checking elsewhere. Four Docker builds succeeded; no runtime or clean audit inference.

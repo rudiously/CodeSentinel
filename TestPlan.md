@@ -47,3 +47,6 @@ All trained-model evaluation documents retain **PENDING: requires trained model 
 
 ## 2026-10-22 continuation
 `make VENV=/opt/anaconda3/bin PYTHON_ONLY=1 lint test`: 86 passed in 4.74s; ruff/black and strict mypy (82 files) passed. New tests cover scan-wide signal fusion across functions, module-level finding weights, actual-decision metrics under High safety floors, non-finite score rejection, synthetic input provenance and pre-inference leakage guard. Offline STUB HTTP smoke again passed. GitHub remote read verified; initial write failed 403, not a successful publish.
+
+## GitHub CI evidence (2026-10-22)
+Run https://github.com/rudiously/CodeSentinel/actions/runs/39824257480 at aea8746: all four Docker builds passed, including frontend TypeScript/Vite production build. Python setup succeeded on 3.11; Ruff/Black passed, mypy failed at ml/train.py:94 and ml/predictor.py:77; tests therefore did not run in CI. Both calls are now fixed locally; local Python-only checks passed 86 tests in 4.84s. Frontend ESLint passed, Prettier failed 17 files, subsequent test/build/audit steps were skipped. npm installation reported 18 vulnerabilities (3 moderate, 13 high, 2 critical); detailed advisories not yet retrieved. No clean audit claim.
