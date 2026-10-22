@@ -1,0 +1,15 @@
+[tool.black]
+target-version = ["py311"]
+[tool.ruff]
+target-version = "py311"
+[tool.mypy]
+python_version = "3.11"
+strict = true
+[tool.pytest.ini_options]
+testpaths = ["ml/tests", "model_service/tests", "backend/tests", "action/tests"]
+pythonpath = ["."]
+addopts = "--import-mode=importlib"
+
+[[tool.mypy.overrides]]
+module = ["sklearn.*", "scipy.*", "datasets.*", "mlflow.*", "transformers.*", "yaml", "matplotlib.*"]
+ignore_missing_imports = true

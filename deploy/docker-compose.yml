@@ -1,0 +1,128 @@
+name: codesentinel
+services:
+  postgres:
+    image: postgres:16.9-alpine3.21
+    user: '70:70'
+    environment:
+      POSTGRES_USER: codesentinel
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: codesentinel
+    volumes: [postgres-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U codesentinel -d codesentinel']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+  model_service:
+    build:
+      context: ..
+      dockerfile: model_service/Dockerfile
+    environment:
+      MODEL_ARTIFACT_DIR: /models/${MODEL_VERSION:-codesentinel-codebert/v1}
+      MAX_CODE_CHARS: ${MAX_CODE_CHARS:-100000}
+      MAX_BATCH_SIZE: ${MAX_BATCH_SIZE:-32}
+      EXPLAIN_STEPS: ${EXPLAIN_STEPS:-8}
+      MAX_REQUEST_BYTES: ${MAX_REQUEST_BYTES:-1000000}
+    volumes: [../models:/models:ro]
+    ports: [127.0.0.1:8001:8001]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:8001/health', timeout=2)"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+  backend:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg://codesentinel:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgres:5432/codesentinel
+      MODEL_SERVICE_URL: http://model_service:8001
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      AUTH_REQUIRED: 'true'
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
+      DEV_LOGIN_ENABLED: ${DEV_LOGIN_ENABLED:-false}
+      CORS_ORIGINS: ${CORS_ORIGINS:-["http://localhost:3002"]}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3002}
+      GITHUB_WEBHOOK_SECRET: ${GITHUB_WEBHOOK_SECRET:-}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
+      GITHUB_OAUTH_CALLBACK_URL: ${GITHUB_OAUTH_CALLBACK_URL:-http://localhost:8000/auth/github/callback}
+      GITHUB_ALLOWED_USER_IDS: ${GITHUB_ALLOWED_USER_IDS:-[]}
+      GITHUB_OIDC_ENABLED: ${GITHUB_OIDC_ENABLED:-false}
+      GITHUB_ALLOWED_REPOSITORIES: ${GITHUB_ALLOWED_REPOSITORIES:-[]}
+      GITHUB_OIDC_AUDIENCE: ${GITHUB_OIDC_AUDIENCE:-codesentinel}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      GITHUB_APP_ID: ${GITHUB_APP_ID:-}
+      GITHUB_APP_INSTALLATION_ID: ${GITHUB_APP_INSTALLATION_ID:-0}
+      GITHUB_APP_PRIVATE_KEY: ${GITHUB_APP_PRIVATE_KEY:-}
+    ports: [127.0.0.1:8000:8000]
+    depends_on:
+      postgres: {condition: service_healthy}
+      model_service: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=2)"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+  frontend:
+    build:
+      context: ..
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+        VITE_USE_MOCKS: ${VITE_USE_MOCKS:-false}
+        VITE_MLFLOW_URL: ${VITE_MLFLOW_URL:-http://localhost:5001}
+    ports: [127.0.0.1:3002:8080]
+    depends_on:
+      backend: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, wget, -q, --spider, http://127.0.0.1:8080/]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+  prometheus:
+    image: prom/prometheus:v3.4.1
+    user: '65534:65534'
+    volumes: [./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro]
+    ports: [127.0.0.1:9090:9090]
+    depends_on:
+      backend: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, wget, -q, --spider, http://127.0.0.1:9090/-/healthy]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+  grafana:
+    image: grafana/grafana:12.0.1
+    user: '472:472'
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set GRAFANA_ADMIN_PASSWORD in .env}
+      GF_USERS_ALLOW_SIGN_UP: 'false'
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports: [127.0.0.1:3001:3000]
+    depends_on:
+      prometheus: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, wget, -q, --spider, http://127.0.0.1:3000/api/health]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+  mlflow:
+    build:
+      context: ..
+      dockerfile: deploy/mlflow/Dockerfile
+    ports: [127.0.0.1:5001:5000]
+    volumes: [mlflow-data:/data]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:5000/health', timeout=2)"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+volumes:
+  postgres-data:
+  mlflow-data:

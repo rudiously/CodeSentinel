@@ -1,0 +1,29 @@
+name: CodeSentinel PR gate
+description: Scan changed source without executing it; BLOCK or ERROR fails.
+inputs:
+  api-url:
+    description: Reachable CodeSentinel API base URL
+    required: true
+  api-token:
+    description: Optional session token; defaults to GitHub Actions OIDC
+    required: false
+  oidc-audience:
+    description: Audience configured on the CodeSentinel backend
+    required: false
+    default: codesentinel
+  github-token:
+    description: Token with pull-requests write permission
+    required: true
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        CODESENTINEL_API_URL: ${{ inputs.api-url }}
+        CODESENTINEL_API_TOKEN: ${{ inputs.api-token }}
+        CODESENTINEL_OIDC_AUDIENCE: ${{ inputs.oidc-audience }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        ACTION_ROOT: ${{ github.action_path }}
+      run: |
+        python -m pip install httpx==0.28.1 pydantic==2.11.5
+        PYTHONPATH="$(dirname "$ACTION_ROOT")" python -m action.gate

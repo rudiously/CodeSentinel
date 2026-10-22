@@ -1,0 +1,53 @@
+name: CI
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: '**/requirements*.txt'
+      - run: sudo apt-get update && sudo apt-get install -y cppcheck
+      - run: make PYTHON_ONLY=1 setup
+      - run: make PYTHON_ONLY=1 lint test
+      - run: PYTHON_BIN=.venv/bin/python bash scripts/smoke_test.sh
+      - run: make train-smoke
+      - run: .venv/bin/python -m scripts.verify_smoke_artifact --artifact models/codesentinel-codebert/smoke-v1
+      - run: .venv/bin/pip-audit --progress-spinner off
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      # npm ci replaces npm install after the lockfile is generated and reviewed (H7).
+      - run: npm install --ignore-scripts
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - run: npm audit --audit-level=high
+  images:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dockerfile: [backend/Dockerfile, model_service/Dockerfile, frontend/Dockerfile, deploy/mlflow/Dockerfile]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+  # Full-stack deployment verification must be run with local secrets; do not expose them to fork PRs.

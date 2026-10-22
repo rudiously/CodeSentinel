@@ -1,0 +1,622 @@
+{
+  "artifact_kind": "SMOKE",
+  "model_version": "smoke-v1-20261022170747528610",
+  "synthetic": true,
+  "claim": "SMOKE PIPELINE VERIFICATION ONLY",
+  "created_at": "2026-10-22T17:31:18.761741+00:00",
+  "test_file": "examples/smoke_test.jsonl",
+  "analyzer_mode": "builtin-python",
+  "ablation": {
+    "model_only": {
+      "flagged_WARN_or_BLOCK": {
+        "accuracy": 0.5,
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 0.6666666666666666,
+        "confusion_matrix": [
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "pr_curve": {
+          "basis": "raw_scores_without_decision_safety_overrides",
+          "precision": [
+            0.5,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "recall": [
+            1.0,
+            1.0,
+            0.75,
+            0.5,
+            0.0
+          ],
+          "thresholds": [
+            0.4990485906600952,
+            0.49904894828796387,
+            0.49904897809028625,
+            0.49904903769493103
+          ]
+        },
+        "prediction_source": "decisions",
+        "threshold": null,
+        "count": 8
+      },
+      "blocked_only": {
+        "accuracy": 0.5,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "confusion_matrix": [
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            0
+          ]
+        ],
+        "pr_curve": {
+          "basis": "raw_scores_without_decision_safety_overrides",
+          "precision": [
+            0.5,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "recall": [
+            1.0,
+            1.0,
+            0.75,
+            0.5,
+            0.0
+          ],
+          "thresholds": [
+            0.4990485906600952,
+            0.49904894828796387,
+            0.49904897809028625,
+            0.49904903769493103
+          ]
+        },
+        "prediction_source": "decisions",
+        "threshold": null,
+        "count": 8
+      }
+    },
+    "static_only": {
+      "flagged_WARN_or_BLOCK": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "confusion_matrix": [
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "pr_curve": {
+          "basis": "raw_scores_without_decision_safety_overrides",
+          "precision": [
+            0.5,
+            1.0,
+            1.0
+          ],
+          "recall": [
+            1.0,
+            1.0,
+            0.0
+          ],
+          "thresholds": [
+            0.0,
+            1.0
+          ]
+        },
+        "prediction_source": "decisions",
+        "threshold": null,
+        "count": 8
+      },
+      "blocked_only": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "confusion_matrix": [
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "pr_curve": {
+          "basis": "raw_scores_without_decision_safety_overrides",
+          "precision": [
+            0.5,
+            1.0,
+            1.0
+          ],
+          "recall": [
+            1.0,
+            1.0,
+            0.0
+          ],
+          "thresholds": [
+            0.0,
+            1.0
+          ]
+        },
+        "prediction_source": "decisions",
+        "threshold": null,
+        "count": 8
+      }
+    },
+    "combined": {
+      "flagged_WARN_or_BLOCK": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "confusion_matrix": [
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "pr_curve": {
+          "basis": "raw_scores_without_decision_safety_overrides",
+          "precision": [
+            0.5,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "recall": [
+            1.0,
+            1.0,
+            0.75,
+            0.5,
+            0.0
+          ],
+          "thresholds": [
+            0.2495242953300476,
+            0.7495244741439819,
+            0.7495244890451431,
+            0.7495245188474655
+          ]
+        },
+        "prediction_source": "decisions",
+        "threshold": null,
+        "count": 8
+      },
+      "blocked_only": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "confusion_matrix": [
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "pr_curve": {
+          "basis": "raw_scores_without_decision_safety_overrides",
+          "precision": [
+            0.5,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "recall": [
+            1.0,
+            1.0,
+            0.75,
+            0.5,
+            0.0
+          ],
+          "thresholds": [
+            0.2495242953300476,
+            0.7495244741439819,
+            0.7495244890451431,
+            0.7495245188474655
+          ]
+        },
+        "prediction_source": "decisions",
+        "threshold": null,
+        "count": 8
+      }
+    }
+  },
+  "error_analysis": {
+    "model_only": [
+      {
+        "code_hash": "9a8c19de82b3e7483ea0241fac54872384bab478b90f04266b4097c47724249b",
+        "label": 0,
+        "decision": "WARN",
+        "risk": 0.4990485906600952,
+        "category": "false_positive"
+      },
+      {
+        "code_hash": "e4ef72015b16d43d1982f92b72e2e3bd32ea4cfdd2ee44c39dc1189b42cb37bd",
+        "label": 0,
+        "decision": "WARN",
+        "risk": 0.4990485906600952,
+        "category": "false_positive"
+      },
+      {
+        "code_hash": "850dd576443fa016fea852712ca832976e321dda8f4028001877930d73103ce5",
+        "label": 0,
+        "decision": "WARN",
+        "risk": 0.4990485906600952,
+        "category": "false_positive"
+      },
+      {
+        "code_hash": "939cff7250af4139f838a0bc61fb3833b5df8ab88207d8f968b6926be5f4d1b7",
+        "label": 0,
+        "decision": "WARN",
+        "risk": 0.4990485906600952,
+        "category": "false_positive"
+      }
+    ],
+    "static_only": [],
+    "combined": []
+  },
+  "latency_seconds": {
+    "count": 8,
+    "p50": 0.004660146001697285,
+    "p95": 0.078291966550023,
+    "includes": "local CPU inference and static analysis; excludes HTTP and DB"
+  },
+  "validation_threshold_sweep": [
+    {
+      "validation_only": true,
+      "warn_threshold": 0.2,
+      "metrics": {
+        "accuracy": 0.5,
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 0.6666666666666666,
+        "confusion_matrix": [
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "pr_curve": {
+          "basis": "raw_scores_without_decision_safety_overrides",
+          "precision": [
+            0.5,
+            0.6666666666666666,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "recall": [
+            1.0,
+            1.0,
+            1.0,
+            0.5,
+            0.0
+          ],
+          "thresholds": [
+            0.24952448904514313,
+            0.24952451884746552,
+            0.7495246082544327,
+            0.7495246231555939
+          ]
+        },
+        "prediction_source": "decisions",
+        "threshold": null,
+        "count": 8
+      }
+    },
+    {
+      "validation_only": true,
+      "warn_threshold": 0.25,
+      "metrics": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "confusion_matrix": [
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "pr_curve": {
+          "basis": "raw_scores_without_decision_safety_overrides",
+          "precision": [
+            0.5,
+            0.6666666666666666,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "recall": [
+            1.0,
+            1.0,
+            1.0,
+            0.5,
+            0.0
+          ],
+          "thresholds": [
+            0.24952448904514313,
+            0.24952451884746552,
+            0.7495246082544327,
+            0.7495246231555939
+          ]
+        },
+        "prediction_source": "decisions",
+        "threshold": null,
+        "count": 8
+      }
+    },
+    {
+      "validation_only": true,
+      "warn_threshold": 0.3,
+      "metrics": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "confusion_matrix": [
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "pr_curve": {
+          "basis": "raw_scores_without_decision_safety_overrides",
+          "precision": [
+            0.5,
+            0.6666666666666666,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "recall": [
+            1.0,
+            1.0,
+            1.0,
+            0.5,
+            0.0
+          ],
+          "thresholds": [
+            0.24952448904514313,
+            0.24952451884746552,
+            0.7495246082544327,
+            0.7495246231555939
+          ]
+        },
+        "prediction_source": "decisions",
+        "threshold": null,
+        "count": 8
+      }
+    },
+    {
+      "validation_only": true,
+      "warn_threshold": 0.35,
+      "metrics": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "confusion_matrix": [
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "pr_curve": {
+          "basis": "raw_scores_without_decision_safety_overrides",
+          "precision": [
+            0.5,
+            0.6666666666666666,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "recall": [
+            1.0,
+            1.0,
+            1.0,
+            0.5,
+            0.0
+          ],
+          "thresholds": [
+            0.24952448904514313,
+            0.24952451884746552,
+            0.7495246082544327,
+            0.7495246231555939
+          ]
+        },
+        "prediction_source": "decisions",
+        "threshold": null,
+        "count": 8
+      }
+    },
+    {
+      "validation_only": true,
+      "warn_threshold": 0.4,
+      "metrics": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "confusion_matrix": [
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "pr_curve": {
+          "basis": "raw_scores_without_decision_safety_overrides",
+          "precision": [
+            0.5,
+            0.6666666666666666,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "recall": [
+            1.0,
+            1.0,
+            1.0,
+            0.5,
+            0.0
+          ],
+          "thresholds": [
+            0.24952448904514313,
+            0.24952451884746552,
+            0.7495246082544327,
+            0.7495246231555939
+          ]
+        },
+        "prediction_source": "decisions",
+        "threshold": null,
+        "count": 8
+      }
+    },
+    {
+      "validation_only": true,
+      "warn_threshold": 0.45,
+      "metrics": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "confusion_matrix": [
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "pr_curve": {
+          "basis": "raw_scores_without_decision_safety_overrides",
+          "precision": [
+            0.5,
+            0.6666666666666666,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "recall": [
+            1.0,
+            1.0,
+            1.0,
+            0.5,
+            0.0
+          ],
+          "thresholds": [
+            0.24952448904514313,
+            0.24952451884746552,
+            0.7495246082544327,
+            0.7495246231555939
+          ]
+        },
+        "prediction_source": "decisions",
+        "threshold": null,
+        "count": 8
+      }
+    },
+    {
+      "validation_only": true,
+      "warn_threshold": 0.5,
+      "metrics": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "confusion_matrix": [
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "pr_curve": {
+          "basis": "raw_scores_without_decision_safety_overrides",
+          "precision": [
+            0.5,
+            0.6666666666666666,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "recall": [
+            1.0,
+            1.0,
+            1.0,
+            0.5,
+            0.0
+          ],
+          "thresholds": [
+            0.24952448904514313,
+            0.24952451884746552,
+            0.7495246082544327,
+            0.7495246231555939
+          ]
+        },
+        "prediction_source": "decisions",
+        "threshold": null,
+        "count": 8
+      }
+    }
+  ],
+  "threshold_policy": "Frozen defaults .35 WARN/.65 BLOCK; sweep is descriptive validation analysis, never tuned on test"
+}

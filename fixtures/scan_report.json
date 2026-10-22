@@ -1,0 +1,36 @@
+{
+  "scan_id": "00000000-0000-4000-8000-000000000001",
+  "repository": "demo/example",
+  "decision": "PASS",
+  "risk_score": 0.05,
+  "functions": [
+    {
+      "name": "add",
+      "file": "clean.py",
+      "start_line": 1,
+      "end_line": 2,
+      "probability": 0.1,
+      "risk_score": 0.05,
+      "decision": "PASS",
+      "code": "def add(a, b):\n    return a + b",
+      "token_importance": []
+    }
+  ],
+  "findings": [],
+  "reasons": [
+    "STUB: no static findings; add model probability 0.10."
+  ],
+  "model_version": "stub-v1",
+  "model_mode": "stub",
+  "artifact_kind": "STUB",
+  "synthetic": true,
+  "timestamp": "2026-10-22T12:00:00Z",
+  "errors": [],
+  "analysis": {
+    "static_analyzer_mode": "builtin-python",
+    "extractor_modes": [
+      "python-ast"
+    ],
+    "ablation_mode": "combined"
+  }
+}

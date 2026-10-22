@@ -1,0 +1,8 @@
+{"code": "def validation_function_0(value):\n    return 0\n", "label": 0, "language": "python", "synthetic": true}
+{"code": "def validation_function_1(value):\n    return eval(value)\n", "label": 1, "language": "python", "synthetic": true}
+{"code": "def validation_function_2(value):\n    return 2\n", "label": 0, "language": "python", "synthetic": true}
+{"code": "def validation_function_3(value):\n    return eval(value)\n", "label": 1, "language": "python", "synthetic": true}
+{"code": "def validation_function_4(value):\n    return 4\n", "label": 0, "language": "python", "synthetic": true}
+{"code": "def validation_function_5(value):\n    return eval(value)\n", "label": 1, "language": "python", "synthetic": true}
+{"code": "def validation_function_6(value):\n    return 6\n", "label": 0, "language": "python", "synthetic": true}
+{"code": "def validation_function_7(value):\n    return eval(value)\n", "label": 1, "language": "python", "synthetic": true}

@@ -1,0 +1,21 @@
+name: CodeSentinel gate
+on: [pull_request]
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: ./action
+        with:
+          api-url: ${{ vars.CODESENTINEL_API_URL }}
+          api-token: ${{ secrets.CODESENTINEL_API_TOKEN }}
+          github-token: ${{ github.token }}

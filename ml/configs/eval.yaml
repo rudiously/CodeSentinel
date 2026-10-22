@@ -1,0 +1,4 @@
+artifact: models/codesentinel-codebert/v1
+split: test
+threshold_source: validation
+long_function_policy: truncate

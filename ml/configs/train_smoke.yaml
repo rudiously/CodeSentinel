@@ -1,0 +1,10 @@
+mode: smoke
+seed: 42
+epochs: 2
+batch_size: 4
+learning_rate: 0.001
+max_length: 64
+output: models/codesentinel-codebert/smoke-v1
+mlflow_uri: sqlite:///mlflow.db
+class_weighting: true
+patience: 2

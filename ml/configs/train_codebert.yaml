@@ -1,0 +1,12 @@
+mode: trained
+model_id: microsoft/codebert-base
+seed: 42
+epochs: 10
+batch_size: 8
+learning_rate: 0.00002
+max_length: 512
+output: models/codesentinel-codebert/v1
+processed_dir: ml/data/processed
+mlflow_uri: sqlite:///mlflow.db
+class_weighting: true
+patience: 2

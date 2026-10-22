@@ -1,0 +1,8 @@
+{
+  "probability": 0.1,
+  "label": "SAFE",
+  "token_importance": [],
+  "model_version": "stub-v1",
+  "model_mode": "stub",
+  "artifact_kind": "STUB"
+}
