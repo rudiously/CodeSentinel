@@ -96,6 +96,7 @@ def extract_functions(
                 raise ServiceError(
                     "EXTRACTION_FAILED", "Unable to identify function name", 422
                 )
+            source_node = node
             start = node.start_point.row + 1
             end = node.end_point.row + 1
             if (
@@ -103,15 +104,15 @@ def extract_functions(
                 and node.parent
                 and node.parent.type == "decorated_definition"
             ):
-                node = node.parent
-                start = node.start_point.row + 1
+                source_node = node.parent
+                start = source_node.start_point.row + 1
             output.append(
                 Function(
                     encoded[name_node.start_byte : name_node.end_byte].decode(),
                     file,
                     start,
                     end,
-                    encoded[node.start_byte : node.end_byte].decode(),
+                    encoded[source_node.start_byte : source_node.end_byte].decode(),
                     language,
                     "tree-sitter",
                 )
