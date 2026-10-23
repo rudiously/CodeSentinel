@@ -1,3 +1,132 @@
-import {api} from '../api/client';import {useResource} from '../hooks/useResource';import {Badge,Header,percent,Provenance,State} from '../components/common';import type {ScanReport} from '../api/types';
-export function ReportView({scan}:{scan:ScanReport}){return <><Provenance scan={scan}/><div className="stats"><div className="panel"><span>DECISION</span><Badge decision={scan.decision}/></div><div className="panel"><span>SCAN RISK</span><strong>{percent(scan.risk_score)}</strong></div><div className="panel"><span>FUNCTIONS / FINDINGS</span><strong>{scan.functions.length} / {scan.findings.length}</strong></div></div><section className="panel"><h2>Why this decision</h2><ul>{scan.reasons.map((reason,i)=><li key={i}>{reason}</li>)}</ul></section>{[...scan.functions].sort((a,b)=>(b.risk_score??-1)-(a.risk_score??-1)).map((fn,i)=><section className="panel function" key={`${fn.name}-${i}`}><div className="row"><div><h2>{fn.name}</h2><p className="muted">{fn.file}:{fn.start_line}–{fn.end_line}</p></div><Badge decision={fn.decision}/></div><p>Model probability {percent(fn.probability)} · Risk {percent(fn.risk_score)}</p>{fn.code?<pre aria-label={`Source for ${fn.name}`}><code>{fn.code.split('\n').map((line,index)=>{const number=fn.start_line+index;const flagged=scan.findings.some(f=>f.file===fn.file&&f.line===number)||fn.token_importance.some(t=>t.line===number&&Math.abs(t.importance)>0.05);return <span key={index} className={`code-line ${flagged?'flagged':''}`}><span className="line-number">{number}</span>{line}{'\n'}</span>})}</code></pre>:<p className="source-notice">Source was processed transiently and is not stored in history. Finding locations remain available below.</p>}</section>)}<section className="panel"><h2>Static findings</h2>{scan.findings.length===0?<p>No findings returned by the configured rule set.</p>:scan.findings.map((f,i)=><article key={i} className="finding"><strong>{f.severity} · {f.rule}</strong><p>{f.message}</p><small>{f.file}:{f.line}</small></article>)}</section></>}
-export function ScanDetail({id}:{id:string}){const scan=useResource(()=>api.detail(id),id);return <><Header eyebrow="SCAN REPORT" title="Decision details" description="Function-level signals and traceable findings. STUB and SMOKE results are labelled explicitly."/><State loading={scan.loading} error={scan.error}>{scan.data&&<ReportView scan={scan.data}/>}</State></>}
+import { api } from "../api/client";
+import { useResource } from "../hooks/useResource";
+import {
+    Badge,
+    Header,
+    percent,
+    Provenance,
+    State,
+} from "../components/common";
+import type { ScanReport } from "../api/types";
+export function ReportView({ scan }: { scan: ScanReport }) {
+    return (
+        <>
+            <Provenance scan={scan} />
+            <div className="stats">
+                <div className="panel">
+                    <span>DECISION</span>
+                    <Badge decision={scan.decision} />
+                </div>
+                <div className="panel">
+                    <span>SCAN RISK</span>
+                    <strong>{percent(scan.risk_score)}</strong>
+                </div>
+                <div className="panel">
+                    <span>FUNCTIONS / FINDINGS</span>
+                    <strong>
+                        {scan.functions.length} / {scan.findings.length}
+                    </strong>
+                </div>
+            </div>
+            <section className="panel">
+                <h2>Why this decision</h2>
+                <ul>
+                    {scan.reasons.map((reason, i) => (
+                        <li key={i}>{reason}</li>
+                    ))}
+                </ul>
+            </section>
+            {[...scan.functions]
+                .sort((a, b) => (b.risk_score ?? -1) - (a.risk_score ?? -1))
+                .map((fn, i) => (
+                    <section className="panel function" key={`${fn.name}-${i}`}>
+                        <div className="row">
+                            <div>
+                                <h2>{fn.name}</h2>
+                                <p className="muted">
+                                    {fn.file}:{fn.start_line}–{fn.end_line}
+                                </p>
+                            </div>
+                            <Badge decision={fn.decision} />
+                        </div>
+                        <p>
+                            Model probability {percent(fn.probability)} · Risk{" "}
+                            {percent(fn.risk_score)}
+                        </p>
+                        {fn.code ? (
+                            <pre aria-label={`Source for ${fn.name}`}>
+                                <code>
+                                    {fn.code.split("\n").map((line, index) => {
+                                        const number = fn.start_line + index;
+                                        const flagged =
+                                            scan.findings.some(
+                                                (f) =>
+                                                    f.file === fn.file &&
+                                                    f.line === number,
+                                            ) ||
+                                            fn.token_importance.some(
+                                                (t) =>
+                                                    t.line === number &&
+                                                    Math.abs(t.importance) >
+                                                        0.05,
+                                            );
+                                        return (
+                                            <span
+                                                key={index}
+                                                className={`code-line ${flagged ? "flagged" : ""}`}
+                                            >
+                                                <span className="line-number">
+                                                    {number}
+                                                </span>
+                                                {line}
+                                                {"\n"}
+                                            </span>
+                                        );
+                                    })}
+                                </code>
+                            </pre>
+                        ) : (
+                            <p className="source-notice">
+                                Source was processed transiently and is not
+                                stored in history. Finding locations remain
+                                available below.
+                            </p>
+                        )}
+                    </section>
+                ))}
+            <section className="panel">
+                <h2>Static findings</h2>
+                {scan.findings.length === 0 ? (
+                    <p>No findings returned by the configured rule set.</p>
+                ) : (
+                    scan.findings.map((f, i) => (
+                        <article key={i} className="finding">
+                            <strong>
+                                {f.severity} · {f.rule}
+                            </strong>
+                            <p>{f.message}</p>
+                            <small>
+                                {f.file}:{f.line}
+                            </small>
+                        </article>
+                    ))
+                )}
+            </section>
+        </>
+    );
+}
+export function ScanDetail({ id }: { id: string }) {
+    const scan = useResource(() => api.detail(id), id);
+    return (
+        <>
+            <Header
+                eyebrow="SCAN REPORT"
+                title="Decision details"
+                description="Function-level signals and traceable findings. STUB and SMOKE results are labelled explicitly."
+            />
+            <State loading={scan.loading} error={scan.error}>
+                {scan.data && <ReportView scan={scan.data} />}
+            </State>
+        </>
+    );
+}

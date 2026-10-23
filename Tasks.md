@@ -1,6 +1,6 @@
 # Tasks
 
-DONE means the stated local implementation acceptance was verified, with limits explicit below. BLOCKED gates are not waived: downstream independent work follows the PM instruction to build around human blockers; it does not advance unresolved milestones. Source documents remain unchanged. No git commits were possible (H1).
+DONE means the stated local implementation acceptance was verified, with limits explicit below. BLOCKED gates are not waived: downstream independent work follows the PM instruction to build around human blockers; it does not advance unresolved milestones. Source documents remain unchanged. PM bootstrap commit aea8746 is published; follow-up agent staging remains denied (H1).
 
 | ID | Role | Acceptance criteria / observed limitation | Dependencies | Scope | Status |
 |---|---|---|---|---|---|
@@ -8,7 +8,7 @@ DONE means the stated local implementation acceptance was verified, with limits 
 | P0-02 | DEVOPS | Conventions and typed toolchain checks pass offline. Exact pinned setup blocked H3; no 3.11 claim. | P0-01 | CORE | DONE |
 | P0-03 | DOCS | A/B/C schemas, exact fixtures and error/provenance rejection tests pass; frontend fixture equals shared fixture. | P0-02 | CORE | DONE |
 | M0 | DEVOPS | Historical empty-but-wired Python skeleton lint/test passed with VENV override. Current full default gate includes frontend and is blocked. | P0-03 | CORE | DONE |
-| P1-01 | ML | Contract C STUB, env limits, uniform errors, metrics and non-root image definition; 12-test stage passed; image build pending H5. | M0 | CORE | DONE |
+| P1-01 | ML | Contract C STUB, env limits, uniform errors, metrics and non-root image definition; 12-test stage passed; CI image build passed; runtime pending H5. | M0 | CORE | DONE |
 | P1-02 | BE | Settings, JSON metadata logs, health, validated timeout/retry model client, CORS and limiter; API error tests pass. | P1-01 | CORE | DONE |
 | P1-03 | BE | Tree-sitter adapter and strict diff parser written; AST fallback/ranges/paths/diff tests pass. Native C/C++/Python grammar verification blocked H4. | P1-02 | CORE | BLOCKED |
 | P1-04 | BE | Pure configured risk with thresholds, High floor, bonus, ablations, ERROR and invalid input unit tests passed. | P1-03 | CORE | DONE |
@@ -32,7 +32,7 @@ DONE means the stated local implementation acceptance was verified, with limits 
 | P3-07 | ML | Colab notebook/Drive instructions written and Python cells syntax-checked; live Colab/full training explicitly H8. | P3-06 | CORE | DONE |
 | M3 | ML | Local CPU SMOKE train/export/registry/load/HTTP/integrity candidate passed. Milestone advancement remains blocked by unresolved M1/M2 gates. | P3-07 | CORE | BLOCKED |
 | P4-01 | DEVOPS | Seven-service Compose, dev overrides, healthchecks and automatic migrations defined; Compose config passes. Live make up blocked H5/H10. | M3 | CORE | BLOCKED |
-| P4-02 | DEVOPS | CI includes lint/types/tests/smoke/frontend/images/audits and cache. Python local checks pass; frontend/audits/images/GitHub run blocked H3/H5/H7/H9. | P4-01 | CORE | BLOCKED |
+| P4-02 | DEVOPS | CI includes lint/types/tests/smoke/frontend/images/audits and cache. Python local checks pass; CI run 39824257480: four images passed; Python typing failed (fixed locally), frontend formatting failed; audits not yet passed. | P4-01 | CORE | BLOCKED |
 | P4-03 | DEVOPS | Metrics endpoint tests, Prometheus/Grafana configs and five-panel JSON static checks pass. Live scraped targets/panels blocked H5/H10. | P4-02 | CORE | BLOCKED |
 | P4-04 | DEVOPS | Tag-triggered GHCR workflow statically parsed with packages:write; build/publish validation blocked H5/H9. | P4-03 | CORE | BLOCKED |
 | M4 | DEVOPS | LIVE TCP e2e script implemented; stack startup/targets/browser gate blocked H5/H7/H10. | P4-04 | CORE | BLOCKED |

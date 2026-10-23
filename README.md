@@ -1,6 +1,6 @@
 # CodeSentinel
 
-Canonical GitHub repository: [rudiously/CodeSentinel](https://github.com/rudiously/CodeSentinel). The remote was verified empty; source import is currently blocked by GitHub integration HTTP 403. The implementation described below is in this local workspace and has not been pushed.
+Canonical GitHub repository: [rudiously/CodeSentinel](https://github.com/rudiously/CodeSentinel). Source is published on `feat/p0-01-foundations` at `aea8746`. Four CI image builds passed; Python typing and frontend formatting checks failed. Python fixes are verified locally and await publication; full CI is not green.
 
 AI-assisted pull request security review: CodeBERT signal + static analysis + an explainable PASS/WARN/BLOCK policy. Dependency failures return **ERROR**, never silent PASS.
 
